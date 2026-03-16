@@ -20,7 +20,7 @@ https://www.zerotier.com/download/
   
 Una vez instalada la aplicación podemos operar desde la barra de herramientas, tal y como muestra la figura.
 
-<img width="1576" height="847" alt="Image" src="https://github.com/user-attachments/assets/b610b4d5-4830-461b-a181-5fe2b6cefabf" />
+<img width="500" height="250" alt="Image" src="https://github.com/user-attachments/assets/b610b4d5-4830-461b-a181-5fe2b6cefabf" />
  
 La figura muestra que el portátil ya se ha unido a la red denominada my-first-network. Para unirse a la red hay que pulsar el item Join New Network e introducir el network ID.    
  
@@ -34,21 +34,22 @@ sudo zerotier-cli join NETWORK_ID
 ```
 Ahora en la web podemos verificar que ambos dispositivos pertenecen ya a la LAN, tal y como muestran las imágenes.
 
-<img width="429" height="169" alt="Image" src="https://github.com/user-attachments/assets/e64a55d5-724b-43bf-b95a-182e1b2f1321" />
-<img width="424" height="171" alt="Image" src="https://github.com/user-attachments/assets/b011e419-4647-45f7-8caf-811b0f5c55b7" />
-
+<img width="429" height="169" alt="Image" src="https://github.com/user-attachments/assets/e64a55d5-724b-43bf-b95a-182e1b2f1321" />   
  
+<img width="424" height="171" alt="Image" src="https://github.com/user-attachments/assets/b011e419-4647-45f7-8caf-811b0f5c55b7" />    
+ 
+
 La primera imagen muestra que hay tres dispositivos conectados en la red my-first-network (además del portátil y la RPi, se conectó otro ordenador). Al clicar sobre el nombre de la red se abre una página como la que muestra la segunda imagen, en la que podemos ver los tres dispositivos conectados con las IP asignadas (columna ZT IP). En la imagen se ve que los tres dispositivos han sido autorizados (columna status). Inicialmente no estarán autorizados. Será necesario clicar en la columna status para autorizar a cada uno de ellos. A partir de ese momento, cualquiera de los dispositivos puede ahora acceder a cualquiera de los otros usando la IP asignada. Para verificarlo, basta hacer ping de cualquiera de ellos a cualquiera de los otros. Podemos trabajar ahora con los dispositivos exactamente igual que haríamos si estuviesen en la misma LAN.    
 
 ## 2. Comunicación vía túnel    
  
 En cualquiera de los escenarios con los que trabajamos en el ecosistema, el dron está conectado físicamente a la estación de tierra que tiene conectada la radio de telemetría. También puede estar conectado por cable a la RPi de abordo, a través de un puerto serie. En principio, solo estos dispositivos conectados al dron pueden enviar los comandos MAVLink (por ejemplo, usando la librería DronLink). Si queremos controlar el dron desde una estación remota conectada a internet entonces tenemos que usar algún mecanismo de comunicación entre esa estación remota y el dispositivo que está conectado directamente al dron. La figura muestra un ejemplo de esta situación.    
-<img width="3525" height="2043" alt="Image" src="https://github.com/user-attachments/assets/9fe4b8a5-d7c2-4e57-a292-44d0dc17e097" />
+<img width="2000" height="1000" alt="Image" src="https://github.com/user-attachments/assets/9fe4b8a5-d7c2-4e57-a292-44d0dc17e097" />
 
 El dron está conectado a la estación de tierra mediante el enlace de telemetría. Por tanto, podemos controlar el dron enviando por ese enlace mensajes MAVLink usando la librería DronLink, por ejemplo, para hacer que el dron despegue. Tenemos también una estación remota con la misma interfaz gráfica que la estación de tierra. Pero si pulsamos el botón de despegue en la estación remota, no podemos ahora usar la librería DronLink, porque esa estación no está conectada con el dron. La aplicación tiene que enviar un mensaje a la estación de tierra para que sea ella la que ordene la operación a través del enlace de telemetría. Esa comunicación entre la estación remota y la estación de tierra puede hacerse vía MQTT o vía sockets. Su implementación dependerá de si ambos dispositivos están en la misma LAN física o no, o si se ha creado una LAN virtual, tal y como se ha explicado en el apartado anterior.    
  
 Sin embargo, es posible crear un túnel que conecte la estación remota con la estación de tierra, de manera que la remota pueda enviar directamente mensajes MAVLink (usando DronLink), que serán redirigidos al dron por la estación de tierra. El túnel puede ser simplemente un socket que conecta ambas estaciones. La estación remota se conecta al dron usando la IP:puerto que ofrece la estación de tierra, que a su vez se habrá conectado al puerto COM en el que está conectada la radio de telemetría. Los mensajes MAVLink que envíe la estación remota usando DronLink viajarán por el túnel de manera que, cuando los reciba, la estación de tierra los redirigirá al puerto COM para que lleguen al dron vía enlace de telemetría. La figura muestra esta situación.    
-<img width="4416" height="1985" alt="Image" src="https://github.com/user-attachments/assets/e84f7038-3140-4a82-a664-3acfe7e50ebb" />
+<img width="2000" height="1000" alt="Image" src="https://github.com/user-attachments/assets/e84f7038-3140-4a82-a664-3acfe7e50ebb" />
 
 De nuevo, la conexión entre ambas estaciones puede ser directa si ambas están en la misma LAN real o virtual, o necesitar de un intermediario si no es el caso.
 Una ventaja de este planteamiento es que podemos eliminar la intermediación si los dispositivos están en la misma LAN real o virtual. Pero la ventaja más importante es que el código de ambas estaciones puede ser el mismo, con la única diferencia del string de conexión que se usa en cada caso. Veamos a continuación cómo implementar este esquema.    
