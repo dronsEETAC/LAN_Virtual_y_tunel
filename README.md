@@ -39,6 +39,9 @@ Ahora en la web podemos verificar que ambos dispositivos pertenecen ya a la LAN,
 <img width="429" height="169" alt="Image" src="https://github.com/user-attachments/assets/e64a55d5-724b-43bf-b95a-182e1b2f1321" />   
 
 	 
+-----------------------      
+
+	 
 <img width="424" height="171" alt="Image" src="https://github.com/user-attachments/assets/b011e419-4647-45f7-8caf-811b0f5c55b7" />    
  
 
