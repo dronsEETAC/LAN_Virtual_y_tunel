@@ -36,13 +36,13 @@ sudo zerotier-cli join NETWORK_ID
 ```
 Ahora en la web podemos verificar que ambos dispositivos pertenecen ya a la LAN, tal y como muestran las imágenes.
 
-<img width="429" height="169" alt="Image" src="https://github.com/user-attachments/assets/e64a55d5-724b-43bf-b95a-182e1b2f1321" />   
+<img width="1000" height="300" alt="Image" src="https://github.com/user-attachments/assets/e64a55d5-724b-43bf-b95a-182e1b2f1321" />   
 
 	 
 -----------------------      
 
 	 
-<img width="424" height="171" alt="Image" src="https://github.com/user-attachments/assets/b011e419-4647-45f7-8caf-811b0f5c55b7" />    
+<img width="1000" height="3000" alt="Image" src="https://github.com/user-attachments/assets/b011e419-4647-45f7-8caf-811b0f5c55b7" />    
  
 
 La primera imagen muestra que hay tres dispositivos conectados en la red my-first-network (además del portátil y la RPi, se conectó otro ordenador). Al clicar sobre el nombre de la red se abre una página como la que muestra la segunda imagen, en la que podemos ver los tres dispositivos conectados con las IP asignadas (columna ZT IP). En la imagen se ve que los tres dispositivos han sido autorizados (columna status). Inicialmente no estarán autorizados. Será necesario clicar en la columna status para autorizar a cada uno de ellos. A partir de ese momento, cualquiera de los dispositivos puede ahora acceder a cualquiera de los otros usando la IP asignada. Para verificarlo, basta hacer ping de cualquiera de ellos a cualquiera de los otros. Podemos trabajar ahora con los dispositivos exactamente igual que haríamos si estuviesen en la misma LAN.    
